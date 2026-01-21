@@ -1,6 +1,6 @@
 <?php
 namespace App\Models\Todo;
-require_once __DIR__ . '/../../core/Model.php';
+require_once __DIR__ . '/../../Core/Model.php';
 require_once __DIR__ . '/Todolistgroup.php';
 use App\Models\Todo\Todolistgroup;
 use FFI\Exception;

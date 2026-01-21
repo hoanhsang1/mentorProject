@@ -56,7 +56,7 @@
                 
                 <div class="user-menu-divider"></div>
                 
-                <a href="/auth/logout" class="user-menu-item text-error">
+                <a href="/logout" class="user-menu-item text-error">
                     <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
                         <path d="M6 14H3C2.46957 14 1.96086 13.7893 1.58579 13.4142C1.21071 13.0391 1 12.5304 1 12V4C1 3.46957 1.21071 2.96086 1.58579 2.58579C1.96086 2.21071 2.46957 2 3 2H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M11 11L15 8L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>

@@ -35,15 +35,15 @@ document.addEventListener('DOMContentLoaded', function() {
     togglePassword.addEventListener('click', function() {
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordInput.setAttribute('type', type);
-        this.querySelector('i').classList.toggle('fa-eye');
-        this.querySelector('i').classList.toggle('fa-eye-slash');
+        this.querySelector('i').classList.toggle('fa-eye eye');
+        this.querySelector('i').classList.toggle('fa-eye-slash eye');
     });
     
     toggleConfirmPassword.addEventListener('click', function() {
         const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         confirmPasswordInput.setAttribute('type', type);
-        this.querySelector('i').classList.toggle('fa-eye');
-        this.querySelector('i').classList.toggle('fa-eye-slash');
+        this.querySelector('i').classList.toggle('fa-eye eye');
+        this.querySelector('i').classList.toggle('fa-eye-slash eye');
     });
     
     // Real-time validation
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (response.ok) {
                 // Chuyển hướng sau khi thành công
-                window.location.href = '/auth/login';
+                window.location.href = '/login';
             } else {
                 // Xử lý lỗi từ server
                 const errorText = await response.text();

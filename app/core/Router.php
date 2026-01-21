@@ -42,8 +42,8 @@ public function dispatch()
     // 👉 Chuyển namespace thành đường dẫn file
     // App\Controllers\Api\TodoController
     // → app/controllers/Api/TodoController.php
-    $controllerFile = __DIR__ . '/../' . str_replace(
-        ['App\\', '\\'],
+    $controllerFile = __DIR__ . '/../controllers/' . str_replace(
+        ['App\\Controllers\\', '\\'],
         ['', '/'],
         $class
     ) . '.php';
@@ -53,7 +53,7 @@ public function dispatch()
         echo "Controller file not found: " . $controllerFile;
         return;
     }
-
+    require_once __DIR__ . '/Controller.php';
     require_once $controllerFile;
 
     if (!class_exists($class)) {

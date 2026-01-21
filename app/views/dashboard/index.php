@@ -1,26 +1,3 @@
-<?php
-/**
- * Dashboard Page
- */
-
-// Start session only if not already started
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header('Location: /auth/login');
-    exit();
-}
-
-// Set page variables for layout
-$page_title = 'Dashboard';
-$show_breadcrumb = true;
-
-// Dashboard content
-ob_start();
-?>
 <!-- Welcome Card -->
 <div class="card mb-6">
     <div class="card-header">
@@ -144,7 +121,7 @@ ob_start();
 <div>
     <h3 class="text-lg font-bold mb-4">Quick Actions</h3>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <a href="/Projects/study-tools-website/public/todo.php" 
+        <a href="/todo" 
            class="btn btn-secondary flex flex-col items-center justify-center h-24">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="mb-2">
                 <path d="M9 11L12 14L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -153,7 +130,7 @@ ob_start();
             Add Todo
         </a>
         
-        <a href="/Projects/study-tools-website/public/calendar.php" 
+        <a href="/calendar" 
            class="btn btn-secondary flex flex-col items-center justify-center h-24">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="mb-2">
                 <path d="M8 7V3M16 7V3M7 11H17M5 21H19C20.1046 21 21 20.1046 21 19V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V19C3 20.1046 3.89543 21 5 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -161,7 +138,7 @@ ob_start();
             Add Event
         </a>
         
-        <a href="/Projects/study-tools-website/public/pomodoro.php" 
+        <a href="/pomodoro" 
            class="btn btn-secondary flex flex-col items-center justify-center h-24">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="mb-2">
                 <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
@@ -170,7 +147,7 @@ ob_start();
             Start Timer
         </a>
         
-        <a href="/Projects/study-tools-website/public/flashcards.php" 
+        <a href="/flashcards" 
            class="btn btn-secondary flex flex-col items-center justify-center h-24">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="mb-2">
                 <path d="M19 11H5M19 11C20.1046 11 21 11.8954 21 13V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V13C3 11.8954 3.89543 11 5 11M19 11V9C19 7.89543 18.1046 7 17 7M5 11V9C5 7.89543 5.89543 7 7 7M7 7V5C7 3.89543 7.89543 3 9 3H15C16.1046 3 17 3.89543 17 5V7M7 7H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -181,7 +158,7 @@ ob_start();
 </div>
 <?php
 
-$content = ob_get_clean();
+// $content = ob_get_clean();
 
 // Include layout
-require_once __DIR__ . '/includes/layout.php';
+// require_once __DIR__ . '/../layouts/layout.php';

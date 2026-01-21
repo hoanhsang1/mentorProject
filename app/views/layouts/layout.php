@@ -1,32 +1,25 @@
 <?php
-/**
- * Main Layout Wrapper
- * Usage: require_once __DIR__ . '/../includes/layout.php';
- */
-
-// Start output buffering
-ob_start();
-
-// Check if session is already started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header('Location: /auth/login.php');
+$currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+$publicRoutes = ['/login', '/auth/login', '/auth/register'];
+
+if (!isset($_SESSION['user_id']) && !in_array($currentPath, $publicRoutes)) {
+    header('Location: /login');
     exit();
 }
 
-// Get user data from session
 $user_id = $_SESSION['user_id'] ?? '';
 $username = $_SESSION['username'] ?? 'User';
 $fullname = $_SESSION['fullname'] ?? $username;
 $role = $_SESSION['role'] ?? 'free';
 
-// Get current page for active navigation
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="vi" class="scroll-smooth">
@@ -45,7 +38,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <link rel="stylesheet" href="/assets/css/layout.css">
     <link rel="stylesheet" href="/assets/css/components.css">
     <link rel="stylesheet" href="/assets/css/utilities.css">
-    <link rel="stylesheet" href="/assets/css/modules/todo.css">
     
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
@@ -60,12 +52,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <body>
     <div class="layout-container">
         <!-- Header -->
-        <?php include __DIR__ . '/../layout/header.php'; ?>
+        <?php include __DIR__ . '/header.php'; ?>
         
         <!-- Main Content -->
         <main class="main-content">
             <!-- Sidebar -->
-            <?php include __DIR__ . '/../layout/sidebar.php'; ?>
+            <?php include __DIR__ . '/sidebar.php'; ?>
             
             <!-- Content Area -->
             <div class="content-area">
@@ -88,7 +80,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <!-- JavaScript -->
     <script src="/assets/js/main.js"></script>
     <script src="/assets/js/layout.js"></script>
-    <script src="/assets/js/modules/todolist.js"></script>
     
     <?php if (isset($page_js)): ?>
         <!-- Page-specific JS -->
@@ -107,8 +98,3 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 </body>
 </html>
-
-<?php
-// End output buffering and output
-echo ob_get_clean();
-?>

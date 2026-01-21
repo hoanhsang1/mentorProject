@@ -1,7 +1,7 @@
 <?php
 namespace App\Models\Todo;
-require_once __DIR__ . '/../../core/Model.php';
-use App\Core\Model\Model;
+require_once __DIR__ . '/../../Core/Model.php';
+use App\Core\Model;
 use PDO;
 
 class Todolist extends Model {

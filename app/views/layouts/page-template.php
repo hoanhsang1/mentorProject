@@ -11,7 +11,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header('Location: auth/login');
+    header('Location: /login');
     exit();
 }
 

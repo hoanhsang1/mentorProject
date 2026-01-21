@@ -1,37 +1,6 @@
 <?php
-// Start session only if not already started
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// $avatarPath = $data['avatarPath'] ?? null;
 
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header('Location: /auth/login');
-    exit();
-}
-
-// Load avatar từ database
-$avatarPath = null;
-try {
-    require_once __DIR__ . '../../app/models/Users_avatar.php';
-    $avatarModel = new App\Models\Users_avatar();
-    $avatarPath = $avatarModel->getAvatar($_SESSION['user_id']);
-    
-    // Kiểm tra file tồn tại
-    if ($avatarPath && !file_exists(__DIR__ . '/' . $avatarPath)) {
-        $avatarPath = null;
-    }
-} catch (Exception $e) {
-    // Nếu có lỗi, dùng session
-    $avatarPath = $_SESSION['avatar_path'] ?? null;
-}
-
-// Set page variables for layout
-$page_title = 'Profile';
-$show_breadcrumb = true;
-
-// Page content
-ob_start();
 ?>
 
 <!-- ==================== -->
@@ -125,7 +94,7 @@ ob_start();
                     <div class="profile_avatar w-20 h-20 rounded-full bg-gradient-primary flex items-center justify-center text-white text-2xl font-bold shadow-md cursor-pointer relative overflow-hidden">
                         
                         <!-- Nếu có ảnh avatar thì hiển thị ảnh, không thì hiển thị chữ cái đầu -->
-                        <?php if($avatarPath && file_exists(__DIR__ . '/' . $avatarPath)): ?>
+                        <?php if($avatarPath && file_exists($_SERVER['DOCUMENT_ROOT'] . '/' . $avatarPath)): ?>
                             <img src="<?php echo htmlspecialchars($avatarPath); ?>" 
                                 alt="Avatar" 
                                 class="w-full h-full rounded-full object-cover"
@@ -135,7 +104,7 @@ ob_start();
                         <?php endif; ?>
                         
                         <!-- Form upload -->
-                        <form id="avatarForm" action="upload.php" method="POST" enctype="multipart/form-data" class="upload_form">
+                        <form id="avatarForm" action="/profile/upload" method="POST" enctype="multipart/form-data" class="upload_form">
                             <input type="file" 
                                 name="avatar" 
                                 id="avatarInput" 
@@ -289,13 +258,6 @@ ob_start();
         </div>
     </div>
 </div>
-
-<?php
-$content = ob_get_clean();
-
-// Include layout
-require_once __DIR__ . '/includes/layout.php';
-?>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

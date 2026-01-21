@@ -265,7 +265,7 @@ select.form-control {
 }
 
 .badge-warning {
-  background: rgba(245, 158, 11, 0.1);
+  background: rgba(245, 158, 11, 0.3);
   color: #92400e;
 }
 
@@ -382,4 +382,27 @@ select.form-control {
   width: 32px;
   height: 32px;
   color: var(--color-primary);
+}
+
+.scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #4a6cf7 #f1f5f9;
+}
+
+.scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scroll::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  background: #4a6cf7;
+  border-radius: 10px;
+}
+
+.scroll::-webkit-scrollbar-thumb:hover {
+  background: #3a5bd9;
 }

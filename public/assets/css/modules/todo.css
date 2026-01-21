@@ -241,7 +241,7 @@
 }
 
 .table-scroll {
-  max-height: 240px;
+  height: 240px;
   overflow-y: auto;
   box-sizing: border-box;
   position: relative;
@@ -261,35 +261,6 @@ table {
   content: "";
   display: block;
   height: 2px;   /* khoảng đệm an toàn cho item cuối */
-}
-
-/* Chrome, Edge, Safari */
-.card-list::-webkit-scrollbar,
-.table-scroll::-webkit-scrollbar {
-  width: 8px;
-}
-
-.card-list::-webkit-scrollbar-track,
-.table-scroll::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 10px;
-}
-
-.card-list::-webkit-scrollbar-thumb,
-.table-scroll::-webkit-scrollbar-thumb {
-  background: #4a6cf7;
-  border-radius: 10px;
-}
-
-.card-list::-webkit-scrollbar-thumb:hover,
-.table-scroll::-webkit-scrollbar-thumb:hover {
-  background: #3a5bd9;
-}
-
-.card-list,
-.table-scroll {
-  scrollbar-width: thin;
-  scrollbar-color: #4a6cf7 #f1f5f9;
 }
 
 .empty-state-content {
@@ -361,6 +332,11 @@ table {
 .content_task tr:last-child .task-menu {
   top: -80px;
 }
+
+.content_task tr:first-child .task-menu {
+  top: 48px;
+}
+
 .task-menu li {
   padding: 8px 10px;
   cursor: pointer;
@@ -389,4 +365,9 @@ table {
 
 .border-blue-200 {
     border-color: #bfdbfe;
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.3);
+  color: #92400e;
 }

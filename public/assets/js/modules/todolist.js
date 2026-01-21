@@ -51,7 +51,7 @@ document.querySelectorAll('[data-editable]').forEach(item => {
 	const save = async () => {
 		const value = input.value.trim()
         const id = item.dataset.id
-        console.log(item.dataset, item.getAttribute("data-id"))
+        // console.log(item.dataset, item.getAttribute("data-id"))
         // XOÁ HẾT → DELETE
         if (value === '') {
             await deleteGroup(id)
@@ -150,7 +150,7 @@ function renderGroup(group) {
 			input.blur() 
 			input.onblur = null
 			const ok = await deleteGroup(id);
-			if (ok) item.remove()
+			if (ok) li.remove()
 			return;
 		}
 		
@@ -232,7 +232,6 @@ async function updateGroup(id,title) {
 	}
 
 	if (data.success) {
-		renderGroup(data.group) 
         showToast("Đã chỉnh sữa Group thành công","success")
 	} else {
 		showToast(data.error || "Error")
@@ -383,7 +382,7 @@ function openTaskModal(isEdit = false) {
         return;
     }
     refreshGroupSelect();
-	console.log("open modal", isEdit, currentGroupId);
+	// console.log("open modal", isEdit, currentGroupId);
     document.getElementById("addTaskModal").classList.remove("hidden");
 }
 
@@ -413,7 +412,7 @@ async function createTask() {
     params.append('status', status);
     params.append('deadline', deadline);
     params.append('group_id', groupId);
-    console.count("CREATE TASK CALLED");
+    // console.count("CREATE TASK CALLED");
     try {
         const res = await fetch("/todo/api/createTask", {
             method: "POST",
@@ -443,7 +442,7 @@ document.addEventListener("change", async function (e) {
     if (!e.target.classList.contains("task-checkbox")) return;
 
     const id = e.target.dataset.id;
-    console.log("clicked:", id);
+    // console.log("clicked:", id);
 
     const params = new URLSearchParams();
     params.append("id", id);
@@ -524,7 +523,7 @@ function updateTaskUI(todo) {
 		</td>
   `;
 
-  //changeStatusClick(); // gắn lại event
+  changeStatusClick(); // gắn lại event
 }
 
 document.addEventListener("click", function (e) {
@@ -711,9 +710,9 @@ submitBtn.addEventListener("click", async () => {
 });
 
 
-document.addEventListener("click", e => {
-  console.log("clicked element:", e.target);
-});
+// document.addEventListener("click", e => {
+//   console.log("clicked element:", e.target);
+// });
 
 document.addEventListener("click", (e) => {
   // Nếu click vào menu, button, checkbox → bỏ qua

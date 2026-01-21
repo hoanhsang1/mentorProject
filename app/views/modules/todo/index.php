@@ -1,35 +1,3 @@
-<?php
-// Start session only if not already started
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-require_once __DIR__ . '../../app/models/todo/Todolist.php';
-require_once __DIR__ . '../../app/models/todo/Todolistgroup.php';
-use App\Models\Todo\Todolist;
-use App\Models\Todo\Todolistgroup;
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header('Location: /auth/login');
-    exit();
-}
-
-// Set page variables for layout
-$page_title = 'Todo List';
-$show_breadcrumb = true;
-
-// Add page-specific CSS/JS
-$page_css = []; // Thêm CSS riêng nếu cần
-$page_js = []; // Thêm JS riêng nếu cần
-
-$modelTodolist = new Todolist();
-$modelGroup = new Todolistgroup();
-
-$allGroups = $modelGroup->getAllGroupById($_SESSION['todolist']);
-
-// Page content
-ob_start();
-?>
-
 <style>
     .badge {
   padding: 4px 12px;
@@ -58,6 +26,11 @@ ob_start();
   border-color: #4a6cf7;
 }
 
+.badge-warning {
+  background: rgba(245, 158, 11, 0.3);
+  color: #92400e;
+}
+
 .btn-none {
         background-color: white;
     border: none;
@@ -66,8 +39,8 @@ ob_start();
 
 </style>
 <!-- Todo Header -->
-<div class="card mb-6">
-    <div class="card-header">
+<div class="card my-4">
+    <div class="card-header mb-4">
         <h2 class="card-title">📝 Todo List</h2>
         <button class="btn btn-primary" id="addTodoBtn" onclick="openTodoModal()">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="mr-2">
@@ -77,9 +50,9 @@ ob_start();
             Add Todo
         </button>
     </div>
-    <div class="card-list">
+    <div class="card-list scroll">
         <ul id="groupList" class="card-nav">
-            <?php foreach ($allGroups as $group): ?>
+            <?php foreach ($groups as $group): ?>
             <li
                 class="card-list-item"
                 data-id="<?= htmlspecialchars($group['group_id']) ?>"
@@ -101,8 +74,8 @@ ob_start();
 
 
 <!-- Todo List -->
-<div style="height: 417px; overflow: visible;" class="card">
-    <div class="card-header">
+<div style="height: 417px; overflow: visible;" class="card mt-4">
+    <div class="card-header mb-4">
         <h3 class="card-title">Tasks</h3>
         <button class="btn btn-primary" onclick="openAddModal()"> <!-- onclick="openTaskModal()" -->
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="mr-2">
@@ -123,7 +96,7 @@ ob_start();
                 </tr>
             </thead>
         </table>
-        <div class="table-scroll">
+        <div class="table-scroll scroll">
             <table class="w-full">
                 <tbody class="content_task">
                     
@@ -228,7 +201,7 @@ ob_start();
 
 <?php
 
-$content = ob_get_clean();
+// $content = ob_get_clean();
 
 // Include layout
-require_once __DIR__ . '/includes/layout.php';
+// require_once __DIR__ . '/includes/layout.php';

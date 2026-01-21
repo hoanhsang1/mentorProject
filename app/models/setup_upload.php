@@ -1,6 +1,4 @@
 <?php
-// File: setup_upload.php (chạy một lần)
-session_start();
 
 echo "<h2>Setup Upload System</h2>";
 echo "<pre>";

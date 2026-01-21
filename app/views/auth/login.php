@@ -1,98 +1,13 @@
-<?php
-// public/auth/login.php - PHIÊN BẢN CUỐI CÙNG
-ob_start(); // QUAN TRỌNG: Bật output buffering
-
-session_start();
-
-// Check if user is already logged in
-if (isset($_SESSION['user_id'])) {
-    ob_end_clean();
-    header('Location: dashboard');
-    exit();
-}
-
-require_once __DIR__ . '/../../app/models/User.php';
-require_once __DIR__ . '/../../app/models/Users_avatar.php';
-require_once __DIR__ . '/../../app/models/todo/Todolist.php';
-use App\Models\User;
-use App\Models\Users_avatar;
-use App\Models\Todo\Todolist;
-
-$errors = [];
-$email_username = '';
-
-// Xử lý POST request
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email_username = trim($_POST['email_username'] ?? '');
-    $password = $_POST['password'] ?? '';
-    
-    // Basic validation
-    if (empty($email_username)) {
-        $errors['email_username'] = 'Vui lòng nhập email hoặc tên đăng nhập';
-    }
-    
-    if (empty($password)) {
-        $errors['password'] = 'Vui lòng nhập mật khẩu';
-    }
-    
-    if (empty($errors)) {
-        try {
-            $userModel = new User();
-            $userAvatar = new Users_avatar();
-            $Todolist = new Todolist();
-            $user = $userModel->authenticate($email_username, $password);
-            
-            if ($user) {
-                // Đăng nhập thành công
-                // DÙNG user_id thay vì id
-                $_SESSION['user_id'] = $user['user_id'] ?? $user['id'] ?? '';
-                $_SESSION['username'] = $user['username'];
-                $_SESSION['email'] = $user['email'];
-                $_SESSION['fullname'] = $user['fullname'] ?? 'User';
-                $_SESSION['role'] = $user['role'] ?? 'free';
-                $_SESSION['subscription_type'] = $user['subscription_type'] ?? 'free';
-                $_SESSION['last_activity'] = time();
-                $Avatar = $userAvatar->getAvatar($user['user_id']);
-                $_SESSION['avatar_path'] =  $Avatar;
-                if(!$Todolist->findTodolistByUser($_SESSION['user_id'])) {
-                    $Todolist->createTodolist($_SESSION['user_id']);
-                }
-                $todolist =$Todolist->findTodolistByUser($_SESSION['user_id']);
-                $_SESSION['todolist'] =  $todolist["todolist_id"];
-
-                // Redirect - QUAN TRỌNG: Xóa buffer trước
-                ob_end_clean();
-                header('Location: /dashboard');
-                exit();
-            } else {
-                $errors['general'] = 'Email/tên đăng nhập hoặc mật khẩu không đúng';
-            }
-            
-        } catch (Exception $e) {
-            error_log('Login Error: ' . $e->getMessage());
-            $errors['general'] = 'Có lỗi hệ thống xảy ra. Vui lòng thử lại sau.';
-        }
-    }
-}
-
-// Success message từ registration
-if (isset($_SESSION['success_message'])) {
-    $success_message = $_SESSION['success_message'];
-    unset($_SESSION['success_message']);
-}
-
-ob_end_flush(); // Hiển thị HTML
-?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StudyHub | Đăng nhập</title>
-    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="/assets/css/modules/auth.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
     <style>
         .error-message {
             color: #dc3545;
@@ -178,7 +93,7 @@ ob_end_flush(); // Hiển thị HTML
             <?php endif; ?>
 
             <!-- Login Form -->
-            <form method="POST" action="" class="auth-form" id="loginForm">
+            <form method="POST" action="/login" class="auth-form" id="loginForm">
                 <!-- Email/Username Field -->
                 <div class="form-group">
                     <label for="email_username">EMAIL HOẶC TÊN ĐĂNG NHẬP</label>
@@ -187,14 +102,14 @@ ob_end_flush(); // Hiển thị HTML
                         <input type="text" 
                                id="email_username" 
                                name="email_username" 
-                               value="<?php echo htmlspecialchars($email_username); ?>"
+                               value="<?php echo htmlspecialchars($email_username ?? ""); ?>"
                                placeholder="email@example.com hoặc tên đăng nhập"
                                class="<?php echo isset($errors['email_username']) ? 'input-error' : ''; ?>"
                                required
                                autofocus>
                     </div>
                     <?php if (isset($errors['email_username'])): ?>
-                        <div class="error-message"><?php echo htmlspecialchars($errors['email_username']); ?></div>
+                        <div class="error-message"><?php echo htmlspecialchars($errors['email_username'] ?? ""); ?></div>
                     <?php endif; ?>
                 </div>
 
@@ -202,7 +117,7 @@ ob_end_flush(); // Hiển thị HTML
                 <div class="form-group">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
                         <label for="password">MẬT KHẨU</label>
-                        <a href="forgot_password.php" class="forgot-password">Quên mật khẩu?</a>
+                        <a href="/forgot_password" class="forgot-password">Quên mật khẩu?</a>
                     </div>
                     <div class="input-with-icon">
                         <i class="fas fa-lock"></i>
@@ -217,7 +132,7 @@ ob_end_flush(); // Hiển thị HTML
                         </button>
                     </div>
                     <?php if (isset($errors['password'])): ?>
-                        <div class="error-message"><?php echo htmlspecialchars($errors['password']); ?></div>
+                        <div class="error-message"><?php echo htmlspecialchars($errors['password'] ?? ""); ?></div>
                     <?php endif; ?>
                 </div>
 
@@ -238,7 +153,7 @@ ob_end_flush(); // Hiển thị HTML
             <div class="auth-footer">
                 <p>
                     Chưa có tài khoản? 
-                    <a href="/auth/register" class="link">Đăng ký ngay</a>
+                    <a href="/register" class="link">Đăng ký ngay</a>
                 </p>
                 <p class="copyright">
                     &copy; 2024 StudyHub. All rights reserved.
@@ -247,7 +162,7 @@ ob_end_flush(); // Hiển thị HTML
         </div>
     </div>
 
-    <script src="js/login.js"></script>
+    <script src="/assets/js/modules/login.js"></script>
 
 </body>
 </html>
