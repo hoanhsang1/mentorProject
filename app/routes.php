@@ -22,7 +22,7 @@ $router->get('/profile', 'App\Controllers\Web\ProfileController@index');
 $router->get('/settings', 'App\Controllers\Web\SettingsController@index');
 $router->get('/profile', 'App\Controllers\Web\ProfileController@index');
 $router->post('/profile/upload', 'App\Controllers\Web\ProfileController@upload');
-
+$router->get('/pomodoro', 'App\Controllers\Web\PomodoroController@index');
 
 
 /* ================= API ================= */
@@ -43,3 +43,14 @@ $router->post('/todo/api/createTask', 'App\Controllers\Api\TodoController@create
 $router->post('/todo/api/toggleStatus', 'App\Controllers\Api\TodoController@toggleStatus');
 $router->post('/todo/api/deleteTask', 'App\Controllers\Api\TodoController@deleteTask');
 $router->post('/todo/api/updateTask', 'App\Controllers\Api\TodoController@updateTask');
+
+/* Pomodoro API */
+$router->get('/pomodoro/api/get', 'App\Controllers\Api\PomodoroController@getPomodoro');
+$router->post('/pomodoro/api/start', 'App\Controllers\Api\PomodoroController@startSession');
+$router->post('/pomodoro/api/pause', 'App\Controllers\Api\PomodoroController@pauseSession');
+$router->post('/pomodoro/api/resume', 'App\Controllers\Api\PomodoroController@resumeSession');
+$router->post('/pomodoro/api/end', 'App\Controllers\Api\PomodoroController@endSession');
+$router->post('/pomodoro/api/switch', 'App\Controllers\Api\PomodoroController@switchSession');
+$router->post('/pomodoro/api/update-settings', 'App\Controllers\Api\PomodoroController@updateSettings');
+$router->get('/pomodoro/api/history', 'App\Controllers\Api\PomodoroController@getHistory');
+$router->get('/pomodoro/api/stats', 'App\Controllers\Api\PomodoroController@getStats');
