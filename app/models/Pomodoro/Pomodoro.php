@@ -139,4 +139,37 @@ class Pomodoro extends Model
         ");
         return $stmt->execute([$pomodoroId]);
     }
+
+    /**
+     * Lấy thống kê pomodoro của user - MỚI THÊM
+     */
+    public function getUserStats($userId)
+    {
+        try {
+            $sql = "SELECT 
+                        p.*,
+                        COUNT(ph.history_id) as total_sessions,
+                        SUM(ph.duration_minutes) as total_minutes
+                    FROM {$this->table} p
+                    LEFT JOIN pomodorohistory ph ON p.pomodoro_id = ph.pomodoro_id
+                    WHERE p.user_id = ?
+                    GROUP BY p.pomodoro_id";
+            
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$userId]);
+            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+            
+            if ($result) {
+                // Tính giờ học
+                $result['total_hours'] = round(($result['total_minutes'] ?? 0) / 60, 1);
+                return $result;
+            }
+            
+            return null;
+            
+        } catch (\Exception $e) {
+            error_log("getUserStats error: " . $e->getMessage());
+            return null;
+        }
+    }
 }

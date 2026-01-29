@@ -43,10 +43,16 @@ class User extends Model
     }
     
     // Thêm vào class User trong User.php
-    public function findById($user_id)
+    public function findById($user_id, $is_deleted=false)
     {
         try {
-            $sql = "SELECT * FROM user WHERE user_id = :user_id AND is_deleted = 0 LIMIT 1";
+            if ($is_deleted) {
+                $sql = "SELECT * FROM user WHERE user_id = :user_id LIMIT 1";
+                
+                } else {
+                $sql = "SELECT * FROM user WHERE user_id = :user_id AND is_deleted = 0 LIMIT 1";
+
+            }
             $stmt = $this->query($sql, ['user_id' => $user_id]);
             $user = $stmt->fetch(\PDO::FETCH_ASSOC);
             
@@ -266,6 +272,155 @@ class User extends Model
             
         } catch (Exception $e) {
             error_log("Authentication error: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Lấy tổng số người dùng (mới thêm)
+     */
+    public function getTotalUsers()
+    {
+        $sql = "SELECT COUNT(*) as total FROM user WHERE is_deleted = 0";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $result['total'] ?? 0;
+    }
+    
+    /**
+     * Lấy số người dùng mới trong X ngày (mới thêm)
+     */
+    public function getNewUsersLastDays($days)
+    {
+        $date = date('Y-m-d', strtotime("-$days days"));
+        $sql = "SELECT COUNT(*) as count FROM user 
+                WHERE created_at >= :date AND is_deleted = 0";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':date' => $date]);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $result['count'] ?? 0;
+    }
+    
+    /**
+     * Lấy tất cả user với phân trang và tìm kiếm (mới thêm)
+     */
+    public function getAllUsers($page = 1, $limit = 10, $search = '', $isdelete=false)
+    {
+        $offset = ($page - 1) * $limit;
+        if ($isdelete) {
+            $sql = "SELECT * FROM user";
+
+        } else {
+
+            $sql = "SELECT * FROM user WHERE is_deleted = 0";
+        }
+        $params = [];
+        
+        if (!empty($search)) {
+            $sql .= " AND (username LIKE :search OR email LIKE :search OR fullname LIKE :search)";
+            $params[':search'] = "%$search%";
+        }
+        
+        $sql .= " ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, \PDO::PARAM_INT);
+        
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+        
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    
+    /**
+     * Đếm tổng số user (có thể với tìm kiếm) (mới thêm)
+     */
+    public function countUsers($search = '')
+    {
+        $sql = "SELECT COUNT(*) as total FROM user WHERE is_deleted = 0";
+        $params = [];
+        
+        if (!empty($search)) {
+            $sql .= " AND (username LIKE :search OR email LIKE :search OR fullname LIKE :search)";
+            $params[':search'] = "%$search%";
+        }
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $result['total'] ?? 0;
+    }
+    
+    /**
+     * Reset password user (mới thêm)
+     */
+    public function resetPassword($userId, $hashedPassword)
+    {
+        $sql = "UPDATE user SET password = :password, updated_at = NOW() WHERE user_id = :user_id";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([
+            ':password' => $hashedPassword,
+            ':user_id' => $userId
+        ]);
+    }
+    
+    /**
+     * Cập nhật trạng thái user (lock/unlock) (mới thêm)
+     */
+    public function updateStatus($userId, $status)
+    {
+        $sql = "UPDATE user SET is_deleted = :status, updated_at = NOW() WHERE user_id = :user_id";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([
+            ':status' => $status,
+            ':user_id' => $userId
+        ]);
+    }
+    
+    /**
+     * Lấy thông tin user với thống kê pomodoro (mới thêm)
+     */
+    public function getUserWithStats($userId)
+    {
+        try {
+            // Lấy thông tin user
+            $user = $this->findById($userId);
+            if (!$user) {
+                return false;
+            }
+            
+            // Lấy thống kê pomodoro
+            $sql = "SELECT 
+                        COUNT(ph.history_id) as total_sessions,
+                        SUM(ph.duration_minutes) as total_minutes,
+                        AVG(ph.duration_minutes) as avg_minutes,
+                        MAX(ph.start_time) as last_session
+                    FROM pomodorohistory ph
+                    JOIN pomodoro p ON ph.pomodoro_id = p.pomodoro_id
+                    WHERE p.user_id = :user_id 
+                        AND ph.status = 'completed' 
+                        AND ph.is_deleted = 0";
+            
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([':user_id' => $userId]);
+            $stats = $stmt->fetch(\PDO::FETCH_ASSOC);
+            
+            return [
+                'user' => $user,
+                'stats' => $stats ?: [
+                    'total_sessions' => 0,
+                    'total_minutes' => 0,
+                    'avg_minutes' => 0,
+                    'last_session' => null
+                ]
+            ];
+            
+        } catch (\Exception $e) {
+            error_log("getUserWithStats error: " . $e->getMessage());
             return false;
         }
     }

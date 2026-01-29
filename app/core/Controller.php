@@ -17,4 +17,14 @@ class Controller
             echo $content;
         }
     }
+
+    protected function json($success, $error = null, $extra = [])
+    {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(array_merge([
+            "success" => $success,
+            "error" => $error
+        ], $extra));
+        exit;
+    }
 }

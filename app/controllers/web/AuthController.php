@@ -53,7 +53,10 @@ class AuthController extends Controller
         $_SESSION['role'] = $user['role'] ?? 'free';
 
         $_SESSION['avatar_path'] = $userAvatar->getAvatar($_SESSION['user_id']);
-
+        if ($user['role']==="admin") {
+            header('Location: /admin');
+            exit;
+        }
         if (!$todolist->findTodolistByUser($_SESSION['user_id'])) {
             $todolist->createTodolist($_SESSION['user_id']);
         }
@@ -87,18 +90,36 @@ class AuthController extends Controller
         $email = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
         $confirm = $_POST['confirm_password'] ?? '';
+        $agreeTerms = isset($_POST['agree_terms']);
 
         $errors = [];
 
+        // Kiểm tra dữ liệu
         if (!$username) $errors['username'] = 'Thiếu username';
         if (!$email) $errors['email'] = 'Thiếu email';
+        if (!$agreeTerms) $errors['terms'] = 'Bạn cần đồng ý với điều khoản sử dụng';
         if ($password !== $confirm) $errors['confirm_password'] = 'Mật khẩu không khớp';
 
+        // Kiểm tra password
+        if (strlen($password) < 6) {
+            $errors['password'] = 'Mật khẩu phải có ít nhất 6 ký tự';
+        }
+
+        // Kiểm tra trùng username và email
+        $user = new \App\Models\User();
+        if ($username && $user->findByUsername($username)) {
+            $errors['username'] = 'Tên đăng nhập đã được sử dụng';
+        }
+        if ($email && $user->findByEmail($email)) {
+            $errors['email'] = 'Email đã được sử dụng';
+        }
+
+        // Nếu có lỗi, hiển thị form với thông báo lỗi
         if ($errors) {
             return $this->view('auth/register', compact('errors','username','fullname','email'), false);
         }
 
-        $user = new \App\Models\User();
+        // Tạo user
         $created = $user->createUser([
             'username' => $username,
             'fullname' => $fullname,

@@ -32,7 +32,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <!-- CSS -->
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="/assets/css/layout.css">
@@ -57,7 +58,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <!-- Main Content -->
         <main class="main-content">
             <!-- Sidebar -->
-            <?php include __DIR__ . '/sidebar.php'; ?>
+            <?php if (isset($sidebar_type) && $sidebar_type === 'admin'): ?>
+                <!-- Admin sidebar -->
+                <?php include __DIR__ . '/admin-sidebar.php'; ?>
+            <?php else: ?>
+                <!-- Regular sidebar -->
+                <?php include __DIR__ . '/sidebar.php'; ?>
+            <?php endif; ?>
             
             <!-- Content Area -->
             <div class="content-area">

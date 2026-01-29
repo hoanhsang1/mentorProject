@@ -24,6 +24,9 @@ $router->get('/profile', 'App\Controllers\Web\ProfileController@index');
 $router->post('/profile/upload', 'App\Controllers\Web\ProfileController@upload');
 $router->get('/pomodoro', 'App\Controllers\Web\PomodoroController@index');
 
+$router->get('/admin', 'App\Controllers\Web\AdminController@index');
+// Web routes
+$router->get('/flashcards', 'App\Controllers\Web\FlashcardController@index');
 
 /* ================= API ================= */
 
@@ -54,3 +57,13 @@ $router->post('/pomodoro/api/switch', 'App\Controllers\Api\PomodoroController@sw
 $router->post('/pomodoro/api/update-settings', 'App\Controllers\Api\PomodoroController@updateSettings');
 $router->get('/pomodoro/api/history', 'App\Controllers\Api\PomodoroController@getHistory');
 $router->get('/pomodoro/api/stats', 'App\Controllers\Api\PomodoroController@getStats');
+
+
+/* Flashcard API */
+$router->get('/flashcards/api', 'App\Controllers\Api\FlashcardController@handle');
+$router->post('/flashcards/api', 'App\Controllers\Api\FlashcardController@handle');
+
+
+/* ================= ADMIN API ================= */
+$router->get('/admin/api', 'App\Controllers\Api\AdminController@handle');
+$router->post('/admin/api', 'App\Controllers\Api\AdminController@handle');
