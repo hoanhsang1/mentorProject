@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyHub | Đăng ký</title>
+    <link rel="stylesheet" href="{% static 'assets/css/modules/auth.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-error {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border-left: 4px solid #dc3545;
+        }
+
+        .input-error {
+            border-color: #dc3545 !important;
+        }
+
+        .terms-checkbox {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+
+        .terms-checkbox input {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>StudyHub</span>
+                </div>
+                <h1 class="auth-title">Đăng ký tài khoản</h1>
+                <p class="auth-subtitle">Bắt đầu hành trình học tập của bạn</p>
+            </div>
+
+            {% if form.non_field_errors %}
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>{{ form.non_field_errors.0 }}</span>
+            </div>
+            {% endif %}
+
+            <form method="POST" action="{% url 'register' %}" class="auth-form" id="registerForm">
+                {% csrf_token %}
+                <!-- Username -->
+                <div class="form-group">
+                    <label for="username">TÊN ĐĂNG NHẬP</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" name="username" value="{{ form.username.value|default:'' }}"
+                            class="{% if form.username.errors %}input-error{% endif %}" placeholder="Nhập tên đăng nhập"
+                            required>
+                    </div>
+                    {% if form.username.errors %}
+                    <div class="error-message">{{ form.username.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Full Name -->
+                <div class="form-group">
+                    <label for="fullname">HỌ VÀ TÊN</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="fullname" name="fullname" value="{{ form.fullname.value|default:'' }}"
+                            class="{% if form.fullname.errors %}input-error{% endif %}" placeholder="Nhập họ và tên">
+                    </div>
+                    {% if form.fullname.errors %}
+                    <div class="error-message">{{ form.fullname.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">EMAIL</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" value="{{ form.email.value|default:'' }}"
+                            class="{% if form.email.errors %}input-error{% endif %}"
+                            placeholder="your.email@example.com" required>
+                    </div>
+                    {% if form.email.errors %}
+                    <div class="error-message">{{ form.email.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password">MẬT KHẨU</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password"
+                            class="{% if form.password.errors %}input-error{% endif %}" placeholder="Ít nhất 6 ký tự"
+                            required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('password')">
+                            <i class="fas fa-eye eye"></i>
+                        </button>
+                    </div>
+                    {% if form.password.errors %}
+                    <div class="error-message">{{ form.password.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label for="confirm_password">XÁC NHẬN MẬT KHẨU</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="confirm_password" name="confirm_password"
+                            class="{% if form.confirm_password.errors %}input-error{% endif %}"
+                            placeholder="Nhập lại mật khẩu" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('confirm_password')">
+                            <i class="fas fa-eye eye"></i>
+                        </button>
+                    </div>
+                    {% if form.confirm_password.errors %}
+                    <div class="error-message">{{ form.confirm_password.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Terms -->
+                <div class="terms-checkbox">
+                    <input type="checkbox" id="agree_terms" name="agree_terms" required>
+                    <label for="agree_terms">
+                        Tôi đồng ý với <a href="#" style="color: #4a6cf7;">Điều khoản sử dụng</a>
+                    </label>
+                </div>
+                {% if form.agree_terms.errors %}
+                <div class="error-message">{{ form.agree_terms.errors.0 }}</div>
+                {% endif %}
+
+                <!-- Submit -->
+                <button type="submit" class="btn btn-primary btn-block">Đăng ký tài khoản</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Đã có tài khoản? <a href="{% url 'login' %}" class="link">Đăng nhập ngay</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // SIMPLE JAVASCRIPT - NO AJAX
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const icon = field.nextElementSibling.querySelector('i');
+
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.className = 'fas fa-eye-slash eye';
+            } else {
+                field.type = 'password';
+                icon.className = 'fas fa-eye eye';
+            }
+        }
+    </script>
+</body>
+
+</html>

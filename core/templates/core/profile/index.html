@@ -1,0 +1,169 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Profile{% endblock %}
+{% block page_title %}Profile{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profil {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center;
+        align-items: center !important;
+    }
+
+    .profile_avatar {
+        border-radius: 50% !important;
+        height: 150px;
+        width: 150px;
+        text-align: center;
+        line-height: 150px;
+        margin-right: 60px;
+    }
+
+    .upload_form {
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 99;
+        position: absolute;
+        border-radius: 50% !important;
+        height: 150px;
+        width: 150px;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    .avatar-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .avatar-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s;
+        color: white;
+        font-size: 14px;
+    }
+
+    .avatar-container:hover .avatar-overlay {
+        opacity: 1;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Profile Header -->
+    <div class="card">
+        <div class="p-6">
+            <div class="profil flex flex-col md:flex-row items-start md:items-center gap-6">
+                <!-- Avatar -->
+                <div class="avatar-container">
+                    <div
+                        class="profile_avatar w-20 h-20 rounded-full bg-gradient-primary flex items-center justify-center text-white text-2xl font-bold shadow-md cursor-pointer relative overflow-hidden">
+
+                        {% if avatarPath %}
+                        <img src="{% static avatarPath %}" alt="Avatar" class="w-full h-full rounded-full object-cover"
+                            id="avatarImage">
+                        {% else %}
+                        <span id="avatarInitial">{{ user.username|slice:":1"|upper }}</span>
+                        {% endif %}
+
+                        <!-- Form upload -->
+                        <form id="avatarForm" action="{% url 'profile_upload' %}" method="POST"
+                            enctype="multipart/form-data" class="upload_form">
+                            {% csrf_token %}
+                            <input type="file" name="avatar" id="avatarInput" accept="image/*" class="hidden">
+                        </form>
+
+                        <!-- Hover overlay -->
+                        <div class="avatar-overlay">
+                            <span>Change Avatar</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Info -->
+                <div class="flex-1 min-w-0">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                        <div class="min-w-0">
+                            <h1 class="text-2xl font-bold text-text truncate">{{ user.fullname|default:user.username }}
+                            </h1>
+                            <div class="flex items-center gap-2 text-text-secondary text-sm mt-1">
+                                <span class="truncate">@{{ user.username }}</span>
+                                <span>•</span>
+                                <span class="truncate">{{ user.email }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Personal Information -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Personal Information</h2>
+        </div>
+        <div class="space-y-6 p-6">
+            <form method="POST" action="{% url 'profile_update' %}" class="space-y-4 mt-6">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="form-label" for="fullname">Full Name</label>
+                    <input type="text" id="fullname" name="fullname"
+                        class="form-control bg-bg-input border-border px-4 py-3 rounded-md" value="{{ user.fullname }}"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input type="email" id="email" name="email"
+                        class="form-control bg-bg-input border-border px-4 py-3 rounded-md" value="{{ user.email }}"
+                        required>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <div class="form-control bg-bg-input border-border px-4 py-3 rounded-md">
+                    {{ user.email|default:"Not set" }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const avatarContainer = document.querySelector('.avatar-container');
+        const avatarInput = document.getElementById('avatarInput');
+        const avatarForm = document.getElementById('avatarForm');
+
+        avatarContainer.addEventListener('click', function () {
+            avatarInput.click();
+        });
+
+        avatarInput.addEventListener('change', function (e) {
+            if (this.files && this.files[0]) {
+                avatarForm.submit();
+            }
+        });
+    });
+</script>
+{% endblock %}

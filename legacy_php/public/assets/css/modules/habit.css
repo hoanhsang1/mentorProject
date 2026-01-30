@@ -1,0 +1,378 @@
+/* Habit Tracker Styles - Weekly View Only */
+
+/* Weekly View */
+#week-header {
+    margin-bottom: 8px;
+}
+
+.week-header-grid {
+    display: grid;
+    grid-template-columns: minmax(200px, 250px) repeat(7, 1fr);
+    gap: 8px;
+    padding: 12px 8px;
+    background-color: var(--color-bg-input);
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.habit-name-header {
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+}
+
+.day-header-week {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.habit-week-row {
+    display: grid;
+    grid-template-columns: minmax(200px, 250px) repeat(7, 1fr);
+    gap: 8px;
+    padding: 12px 8px;
+    border-bottom: 1px solid var(--color-border);
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+.habit-week-row:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.habit-week-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 8px;
+}
+
+.habit-cell-week {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.habit-day-week {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 2px solid var(--color-border);
+    background: white;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.habit-day-week:hover:not(:disabled) {
+    border-color: var(--color-primary);
+    transform: scale(1.05);
+    box-shadow: var(--shadow-sm);
+}
+
+.habit-day-week.completed {
+    border-color: transparent;
+    color: white;
+    font-weight: bold;
+}
+
+.habit-day-week.today {
+    border-color: var(--color-primary);
+    border-width: 2px;
+}
+
+.habit-day-week.today.completed {
+    border-color: transparent;
+}
+
+.habit-day-week.future {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.habit-day-week:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.habit-day-week.weekend {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Stats Cards */
+.stat-card {
+    background: white;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 1rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-label {
+    color: var(--color-text-secondary);
+}
+
+.stat-value {
+    color: var(--color-text);
+}
+
+.stat-icon {
+    transition: background-color 0.2s ease;
+}
+
+/* Modal */
+#confirm-modal {
+    display: none;
+}
+
+#confirm-modal.show {
+    display: flex;
+}
+
+.modal-backdrop {
+    cursor: pointer;
+}
+
+.modal-container {
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Body scroll lock */
+body.modal-open {
+    overflow: hidden;
+}
+
+/* Color Options */
+.color-option {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.color-option:hover {
+    transform: scale(1.1);
+}
+
+.color-option.active {
+    border-color: var(--color-text);
+    transform: scale(1.1);
+}
+
+/* Calendar Legend */
+.calendar-legend {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+}
+
+/* Loading State */
+#habits-container.loading {
+    opacity: 0.6;
+    pointer-events: none;
+    position: relative;
+    min-height: 200px;
+}
+
+#habits-container.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .week-header-grid,
+    .habit-week-row {
+        grid-template-columns: minmax(150px, 200px) repeat(7, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .week-header-grid,
+    .habit-week-row {
+        grid-template-columns: minmax(120px, 150px) repeat(7, 1fr);
+        gap: 4px;
+    }
+    
+    .habit-day-week {
+        width: 32px;
+        height: 32px;
+        font-size: 0.75rem;
+    }
+    
+    .day-header-week {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .week-header-grid,
+    .habit-week-row {
+        grid-template-columns: minmax(100px, 120px) repeat(7, 1fr);
+        gap: 2px;
+    }
+    
+    .habit-day-week {
+        width: 28px;
+        height: 28px;
+        font-size: 0.7rem;
+    }
+    
+    .calendar-legend {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .habit-week-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .week-header-grid,
+    .habit-week-row {
+        grid-template-columns: minmax(80px, 100px) repeat(7, 1fr);
+        gap: 1px;
+    }
+    
+    .habit-day-week {
+        width: 24px;
+        height: 24px;
+        font-size: 0.6rem;
+    }
+    
+    .day-header-week {
+        font-size: 0.6rem;
+    }
+}
+
+/* Thêm vào file habit.css */
+.habit-day-week.debug {
+    border: 2px solid red !important;
+}
+
+.habit-day-week.debug:hover {
+    border: 2px solid #ff0000 !important;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5) !important;
+}
+
+/* Edit Modal Styles */
+.edit-color-option {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.edit-color-option:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.edit-color-option.active {
+    border-color: var(--color-text);
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Modal animations */
+#edit-modal {
+    display: none;
+}
+
+#edit-modal.show {
+    display: flex;
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Edit button styles */
+.edit-habit-btn {
+    transition: all 0.2s ease;
+}
+
+.edit-habit-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Habit week info layout */
+.habit-week-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 8px;
+}
+
+.habit-week-info > div:first-child {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+}

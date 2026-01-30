@@ -1,0 +1,183 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block page_title %}Admin Dashboard{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'assets/css/modules/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-content">
+
+    <!-- Dashboard Tab -->
+    <div id="dashboard-tab" class="tab-content active">
+        <div class="loading" id="dashboard-loading">
+            <div class="loading-spinner"></div>
+            <p>Loading dashboard...</p>
+        </div>
+
+        <div id="dashboard-content" style="display: none;">
+            <!-- Stats Cards -->
+            <div class="stats-grid" id="stats-grid"></div>
+
+            <!-- Charts -->
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3 class="chart-title">Daily Study Time (Last 7 Days)</h3>
+                    <div class="h-64"><canvas id="studyTimeChart"></canvas></div>
+                </div>
+                <div class="chart-container">
+                    <h3 class="chart-title">User Activity Overview</h3>
+                    <div class="h-64"><canvas id="activityChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Users Tab -->
+    <div id="users-tab" class="tab-content">
+        <div class="admin-filters">
+            <input type="text" id="user-search" class="form-control" placeholder="Search by username, name or email...">
+            <button class="btn btn-primary" onclick="loadUsers()">Search</button>
+            <button class="btn btn-secondary" onclick="resetFilters()">Reset</button>
+        </div>
+
+        <div class="loading" id="users-loading">
+            <div class="loading-spinner"></div>
+            <p>Loading users...</p>
+        </div>
+
+        <div id="users-content" style="display: none;">
+            <div class="admin-table-container scroll overflow-x-auto">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>User</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Joined</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body"></tbody>
+                </table>
+            </div>
+
+            <div class="admin-pagination" id="users-pagination"></div>
+        </div>
+    </div>
+
+    <!-- Pomodoro Stats Tab -->
+    <div id="pomodoro-tab" class="tab-content">
+        <div class="admin-filters">
+            <div class="flex items-center space-x-3">
+                <label class="text-text-secondary whitespace-nowrap">Time Range:</label>
+                <select id="pomodoro-days" class="form-control w-40">
+                    <option value="7">Last 7 days</option>
+                    <option value="30" selected>Last 30 days</option>
+                    <option value="90">Last 90 days</option>
+                    <option value="365">Last year</option>
+                </select>
+                <button class="btn btn-primary" onclick="loadPomodoroStats()">Update View</button>
+            </div>
+        </div>
+
+        <div class="loading" id="pomodoro-loading">
+            <div class="loading-spinner"></div>
+            <p>Loading pomodoro data...</p>
+        </div>
+
+        <div id="pomodoro-content" style="display: none;">
+            <div class="stats-grid" id="pomodoro-stats"></div>
+
+            <div class="chart-container">
+                <h3 class="chart-title">Top 10 High-Performing Users</h3>
+                <div class="h-80"><canvas id="topUsersChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Tab -->
+    <div id="activity-tab" class="tab-content">
+        <div class="admin-filters">
+            <div class="flex items-center space-x-3">
+                <label class="text-text-secondary whitespace-nowrap">Activity Period:</label>
+                <select id="activity-days" class="form-control w-40">
+                    <option value="7" selected>Last 7 days</option>
+                    <option value="30">Last 30 days</option>
+                    <option value="90">Last 90 days</option>
+                </select>
+                <button class="btn btn-primary" onclick="loadActivity(1)">Refresh Data</button>
+            </div>
+        </div>
+
+        <div class="loading" id="activity-loading">
+            <div class="loading-spinner"></div>
+            <p>Retrieving activity logs...</p>
+        </div>
+
+        <div id="activity-content" style="display: none;">
+            <div class="chart-container mb-6">
+                <h3 class="chart-title">Daily Activity Trend</h3>
+                <div class="h-64"><canvas id="dailyActivityChart"></canvas></div>
+            </div>
+
+            <div class="admin-table-container">
+                <h3 class="p-4 font-semibold text-lg border-b border-border">Detailed Activity Log</h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Status</th>
+                            <th>Duration</th>
+                            <th>Topic / Focus</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activity-table-body"></tbody>
+                </table>
+                <div class="admin-pagination" id="activity-pagination"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div id="user-detail-modal" class="admin-modal">
+    <div class="modal-content">
+        <div class="modal-body" id="user-detail-content">
+            <!-- Content sẽ được load dynamic -->
+        </div>
+    </div>
+</div>
+
+<div id="reset-password-modal" class="admin-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Reset User Password</h3>
+            <button class="modal-close" data-close-modal="reset-password-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="mb-4">
+                <p class="text-text">Are you sure you want to reset this user's password?</p>
+                <p class="text-sm text-text-secondary mt-1">A new random 8-character password will be generated and
+                    displayed once.</p>
+            </div>
+            <div id="reset-password-result" class="mb-4"></div>
+            <div class="flex justify-end space-x-3">
+                <button class="btn btn-secondary" onclick="closeModal('reset-password-modal')">Cancel</button>
+                <button class="btn btn-danger" onclick="confirmResetPassword()">
+                    Generate New Password
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'assets/js/modules/admin.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,805 @@
+/* ==================== */
+/*     CALENDAR CSS     */
+/* ==================== */
+
+/* Calendar Container */
+.calendar-container {
+    min-height: calc(100vh - 180px);
+}
+
+/* Calendar Header */
+.calendar-header {
+    margin-bottom: 24px;
+}
+
+/* Card Styling (giống todo-card) */
+.card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px 24px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+/* Calendar Grid Header (Days of Week) */
+.calendar-grid-header {
+    border-bottom: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+    border-radius: 12px 12px 0 0;
+    padding: 12px 8px;
+}
+
+.calendar-grid-header .grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+}
+
+.calendar-day-header {
+    text-align: center;
+    padding: 10px 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    border-radius: 8px;
+}
+
+.calendar-day-header:hover {
+    background-color: #f1f5f9;
+    transform: translateY(-1px);
+}
+
+.calendar-day-header.selected {
+    background: linear-gradient(to right, #4a6cf7, #3a5bd9);
+    color: white;
+}
+
+.calendar-day-header.selected .day-name,
+.calendar-day-header.selected .day-number {
+    color: white;
+}
+
+.calendar-day-header.today {
+    color: #4a6cf7;
+    font-weight: 600;
+    position: relative;
+}
+
+.calendar-day-header.today::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background-color: #4a6cf7;
+    border-radius: 50%;
+}
+
+.calendar-day-header.selected.today::after {
+    background-color: white;
+}
+
+.day-name {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-bottom: 4px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.day-number {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Month Grid Container */
+.calendar-month-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    min-height: 500px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0 0 12px 12px;
+    overflow: hidden;
+}
+
+/* Calendar Day Cell */
+.calendar-day {
+    border-right: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 8px;
+    position: relative;
+    min-height: 90px;
+    background-color: white;
+    transition: all 0.2s ease;
+    overflow: hidden;
+}
+
+.calendar-day:hover {
+    background-color: #f8fafc;
+    transform: translateY(-1px);
+    z-index: 5;
+}
+
+.calendar-day:last-child {
+    border-right: none;
+}
+
+.calendar-day.other-month {
+    background-color: #f8fafc;
+    color: #94a3b8;
+}
+
+.calendar-day.other-month .date-number {
+    color: #94a3b8;
+}
+
+.calendar-day.today {
+    background-color: #f0f9ff;
+    position: relative;
+}
+
+.calendar-day.today::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 8px;
+    height: 8px;
+    background-color: #4a6cf7;
+    border-radius: 50%;
+}
+
+.calendar-day.selected {
+    background-color: #f1f5fe;
+    border: 2px solid #4a6cf7;
+    margin: -1px;
+    z-index: 10;
+}
+
+/* Date Number in Cell */
+.date-number {
+    font-size: 14px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 6px;
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+.calendar-day.today .date-number {
+    color: #4a6cf7;
+    font-weight: 700;
+}
+
+.calendar-day.selected .date-number {
+    background: linear-gradient(to right, #4a6cf7, #3a5bd9);
+    color: white;
+}
+
+/* Events in Day Cell */
+.day-events {
+    position: absolute !important;
+    top: 32px !important; /* Xuống dưới date-number */
+    left: 4px !important;
+    right: 4px !important;
+    bottom: 4px !important;
+    padding: 2px !important;
+    overflow-y: auto !important;
+    z-index: 5 !important;
+    max-height: calc(100% - 36px) !important;
+}
+
+/* Hide scrollbar but keep scroll */
+.day-events::-webkit-scrollbar {
+    width: 4px;
+}
+
+.day-events::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 999px;
+}
+
+.day-event {
+    display: flex !important;
+    align-items: center !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    margin-bottom: 2px !important;
+    padding: 3px 6px !important;
+    border-radius: 4px !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    border-left: 3px solid !important;
+    transition: all 0.2s ease !important;
+}
+
+.day-event:hover {
+    transform: translateX(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* Event Type Colors */
+.event-type-event {
+    background-color: rgba(14, 165, 233, 0.15) !important;
+    color: #0369a1 !important;
+    border-left-color: #0ea5e9 !important;
+}
+
+.event-type-task {
+    background-color: rgba(34, 197, 94, 0.15) !important;
+    color: #166534 !important;
+    border-left-color: #22c55e !important;
+}
+
+.event-type-reminder {
+    background-color: rgba(168, 85, 247, 0.15) !important;
+    color: #7c3aed !important;
+    border-left-color: #a855f7 !important;
+}
+
+/* Event Priority Dots */
+.event-priority-dot {
+    display: inline-block !important;
+    width: 6px !important;
+    height: 6px !important;
+    border-radius: 50% !important;
+    margin-right: 4px !important;
+    flex-shrink: 0 !important;
+}
+
+.priority-high { background-color: #ef4444; }
+.priority-medium { background-color: #f97316; }
+.priority-low { background-color: #22c55e; }
+
+/* FIX: Calendar day với events */
+.calendar-day.has-events {
+    background-color: #f8fafc !important;
+}
+
+.calendar-day.has-events:hover .day-event {
+    transform: translateX(2px) !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+}
+
+/* FIX: More events indicator */
+.more-events {
+    font-size: 10px !important;
+    color: #64748b !important;
+    padding: 2px 4px !important;
+    border-radius: 3px !important;
+    background-color: #f1f5f9 !important;
+    margin-top: 2px !important;
+    cursor: pointer !important;
+    text-align: center !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+.more-events:hover {
+    background-color: #e2e8f0 !important;
+}
+
+/* Event List (giống todo) */
+.event-item {
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+    background-color: white;
+}
+
+.event-item:hover {
+    border-color: #cbd5e0;
+    transform: translateX(2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.event-item.completed {
+    opacity: 0.7;
+    text-decoration: line-through;
+}
+
+.event-time {
+    font-size: 14px;
+    color: #64748b;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+}
+
+/* Badges (giống todo) */
+.badge {
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 999px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #4a5568;
+}
+
+.badge-soft {
+    background: #f8fafc;
+    color: #4a5568;
+}
+
+.badge-medium {
+    background: rgba(74,108,247,0.08);
+    color: #4a6cf7;
+    border-color: rgba(74,108,247,0.2);
+}
+
+.badge-strong {
+    background: #4a6cf7;
+    color: white;
+    border-color: #4a6cf7;
+}
+
+.badge-warning {
+    background: rgba(245, 158, 11, 0.3);
+    color: #92400e;
+}
+
+.badge-event {
+    background: rgba(14, 165, 233, 0.1);
+    color: #0369a1;
+    border-color: rgba(14, 165, 233, 0.2);
+}
+
+.badge-task {
+    background: rgba(34, 197, 94, 0.1);
+    color: #166534;
+    border-color: rgba(34, 197, 94, 0.2);
+}
+
+.badge-reminder {
+    background: rgba(168, 85, 247, 0.1);
+    color: #7c3aed;
+    border-color: rgba(168, 85, 247, 0.2);
+}
+
+/* Modal for Event Creation/Editing (giống todo modal) */
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(2px);
+}
+
+.modal-card {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.18);
+    padding: 22px 24px 20px;
+    animation: modalScale .2s ease;
+}
+
+@keyframes modalScale {
+    from {
+        opacity: 0;
+        transform: scale(.96) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2d3748;
+    position: relative;
+}
+
+.modal-title::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 48px;
+    height: 3px;
+    border-radius: 10px;
+    background: linear-gradient(to right, #4a6cf7, #3a5bd9);
+}
+
+.modal-close {
+    border: none;
+    background: #f8fafc;
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #4a5568;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    background: #edf2f7;
+}
+
+.modal-body {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Hide scrollbar for modal body */
+.modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 999px;
+}
+
+/* Input styles (giống modal-input) */
+.form-label {
+    font-size: 14px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #4a5568;
+    font-weight: 600;
+    margin-bottom: 6px;
+    margin-top: 16px;
+    display: block;
+}
+
+.modal-input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    outline: none;
+    font-size: 16px;
+    color: #2d3748;
+    transition: .15s;
+    font-family: Roboto, sans-serif;
+}
+
+.modal-input::placeholder {
+    color: #a0aec0;
+}
+
+.modal-input:focus {
+    border-color: #4a6cf7;
+    box-shadow: 0 0 0 4px rgba(74,108,247,0.15);
+    background: #fff;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+/* Button styles */
+.btn {
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    font-family: Roboto, sans-serif;
+}
+
+.btn-primary {
+    background: linear-gradient(to right, #4a6cf7, #3a5bd9);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(74, 108, 247, 0.3);
+}
+
+.btn-secondary {
+    background: #f8fafc;
+    color: #4a5568;
+    border: 1px solid #e2e8f0;
+}
+
+.btn-secondary:hover {
+    background: #edf2f7;
+    border-color: #cbd5e0;
+}
+
+.btn-ghost {
+    background: transparent;
+    border: 1px solid #e2e8f0;
+    padding: 8px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #4a5568;
+}
+
+.btn-ghost:hover {
+    background: #f8fafc;
+}
+
+.btn-icon {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon:hover {
+    background: #f1f5f9;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    display: none;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e2e8f0;
+    border-top-color: #4a6cf7;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #94a3b8;
+}
+
+.empty-state svg {
+    opacity: 0.5;
+    margin-bottom: 16px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .calendar-day {
+        min-height: 80px;
+        padding: 6px;
+    }
+    
+    .date-number {
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        font-size: 12px;
+    }
+    
+    .day-event {
+        font-size: 10px;
+        padding: 2px 4px;
+    }
+}
+
+@media (max-width: 768px) {
+    .calendar-header .flex {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    
+    .calendar-header .flex > div {
+        width: 100%;
+    }
+    
+    .calendar-grid-header {
+        padding: 8px 4px;
+    }
+    
+    .day-name {
+        font-size: 10px;
+    }
+    
+    .day-number {
+        font-size: 14px;
+    }
+    
+    .calendar-month-grid {
+        min-height: 400px;
+    }
+    
+    .calendar-day {
+        min-height: 70px;
+        padding: 4px;
+    }
+    
+    .modal-card {
+        margin: 16px;
+        max-width: calc(100% - 32px);
+    }
+}
+
+@media (max-width: 640px) {
+    .calendar-month-grid {
+        min-height: 350px;
+    }
+    
+    .calendar-day {
+        min-height: 60px;
+    }
+    
+    .date-number {
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 11px;
+    }
+    
+    .day-events {
+        display: none;
+    }
+    
+    .calendar-day.has-events::after {
+        content: '•';
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #4a6cf7;
+        font-size: 16px;
+        font-weight: bold;
+    }
+}
+
+/* ==================== */
+/*   MULTI-DAY EVENTS   */
+/* ==================== */
+
+/* Multi-day event styling */
+.day-event.multi-day {
+    position: relative;
+    margin-left: -4px;
+    margin-right: -4px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+/* Start of multi-day event */
+.day-event.multi-day-start {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-right: -8px;
+    padding-right: 12px;
+}
+
+/* Middle of multi-day event */
+.day-event.multi-day-middle {
+    border-radius: 0;
+    margin-left: -8px;
+    margin-right: -8px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+/* End of multi-day event */
+.day-event.multi-day-end {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-left: -8px;
+    padding-left: 12px;
+}
+
+/* Arrow indicators for multi-day events */
+.day-event.multi-day-start::after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    top: 0;
+    bottom: 0;
+    width: 8px;
+    background: inherit;
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.day-event.multi-day-end::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 0;
+    bottom: 0;
+    width: 8px;
+    background: inherit;
+    clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+
+/* Full-width for multi-day events */
+.day-event.multi-day-middle {
+    min-width: calc(100% + 16px);
+    margin-left: -8px;
+    margin-right: -8px;
+}
+
+/* Hover effect for multi-day events */
+.day-event.multi-day:hover {
+    z-index: 10;
+    transform: scale(1.02);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* All-day events styling */
+.day-event.is-all-day {
+    font-weight: 600;
+    border-left-width: 4px;
+}
+
+/* Event that spans the entire cell */
+.day-event.full-cell {
+    position: absolute;
+    top: 30px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    z-index: 2;
+}
+
+/* Event time display for multi-day */
+.day-event.multi-day .event-time-indicator {
+    font-size: 9px;
+    opacity: 0.8;
+    margin-left: 4px;
+    font-weight: normal;
+}

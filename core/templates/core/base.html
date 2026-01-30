@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyHub - {% block title %}Dashboard{% endblock %}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/components.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/utilities.css' %}">
+
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <div class="layout-container">
+        <!-- Header -->
+        {% include 'core/layouts/header.html' %}
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar -->
+            {% if sidebar_type == 'admin' %}
+            <!-- Admin sidebar -->
+            {% include 'core/layouts/admin_sidebar.html' %}
+            {% else %}
+            <!-- Regular sidebar -->
+            {% include 'core/layouts/sidebar.html' %}
+            {% endif %}
+
+            <!-- Content Area -->
+            <div class="content-area">
+                {% if show_breadcrumb %}
+                <div class="breadcrumb">
+                    <a href="{% url 'index' %}" class="text-primary">Dashboard</a>
+                    <span class="text-text-secondary">/</span>
+                    <span class="text-text-secondary">{{ page_title }}</span>
+                </div>
+                {% endif %}
+
+                <h1 class="page-title">{% block page_title %}Dashboard{% endblock %}</h1>
+
+                <!-- Page content will be inserted here -->
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    <script src="{% static 'assets/js/layout.js' %}"></script>
+
+    {% block extra_js %}{% endblock %}
+
+    <div id="app-toast-container"></div>
+
+</body>
+
+</html>

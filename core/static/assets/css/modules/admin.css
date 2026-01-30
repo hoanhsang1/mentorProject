@@ -1,0 +1,503 @@
+/* ==================== */
+/*     ADMIN STYLES     */
+/* ==================== */
+
+/* Admin layout */
+.admin-content {
+    padding: 1.5rem;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    border-left: 4px solid;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.stat-card.primary {
+    border-left-color: var(--primary);
+}
+
+.stat-card.success {
+    border-left-color: var(--success);
+}
+
+.stat-card.warning {
+    border-left-color: var(--warning);
+}
+
+.stat-card.danger {
+    border-left-color: var(--error);
+}
+
+.stat-card.info {
+    border-left-color: var(--info);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stat-trend {
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.stat-trend.positive {
+    color: var(--success);
+}
+
+.stat-trend.negative {
+    color: var(--error);
+}
+
+/* Charts Grid */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.chart-container {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+}
+
+.chart-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+
+/* Admin Tables */
+.admin-table-container {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 2rem;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th {
+    background-color: var(--bg-input);
+    padding: 1rem 1.5rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+}
+
+.admin-table td {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.admin-table tr:hover {
+    background-color: var(--bg-input);
+}
+
+/* Tabs */
+.admin-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+}
+
+.tab-button {
+    padding: 0.75rem 1.5rem;
+    background: none;
+    border: none;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.tab-button:hover {
+    color: var(--text);
+}
+
+.tab-button.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+.admin-tab-btn svg {
+    flex-shrink: 0;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Loading */
+.loading {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    border: 3px solid var(--bg-input);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Badges */
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status-badge.active {
+    background-color: var(--success-light);
+    color: var(--success);
+}
+
+.status-badge.locked {
+    background-color: var(--error-light);
+    color: var(--error);
+}
+
+.status-badge.deleted {
+    background-color: var(--bg-input);
+    color: var(--text-secondary);
+}
+
+/* Search and Filters */
+.admin-filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: center;
+}
+
+.search-input {
+    flex: 1;
+    max-width: 300px;
+}
+
+.date-range {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.date-input {
+    width: 150px;
+}
+
+/* Pagination */
+.admin-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.page-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--text);
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.page-btn:hover:not(:disabled) {
+    background-color: var(--bg-input);
+    transform: translateY(-1px);
+}
+
+.page-btn.active {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.page-info {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+/* ==================== */
+/*      MODAL STYLES    */
+/* ==================== */
+
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--primary);
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+}
+
+.modal-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+/* User avatar in modal */
+.user-avatar-large {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0 auto 1rem;
+}
+
+/* Activity timeline in modal */
+.activity-timeline {
+    margin-top: 1.5rem;
+}
+
+.activity-item {
+    display: flex;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+}
+
+.activity-icon svg {
+    width: 1rem;
+    height: 1rem;
+    color: var(--primary);
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-title {
+    font-size: 0.875rem;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+}
+
+.activity-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* Modal styles */
+.admin-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    /* Đảm bảo trên cùng */
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.admin-modal.show {
+    opacity: 1;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-xl);
+    transform: translateY(20px) scale(0.98);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.admin-modal.show .modal-content {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+/* Đảm bảo modal content không bị ảnh hưởng bởi scroll */
+.modal-content {
+    z-index: 10000;
+    position: relative;
+}
+
+/* Fix cho mobile */
+@media (max-width: 768px) {
+    .modal-content {
+        max-height: 90vh;
+        margin: 1rem;
+        width: calc(100% - 2rem);
+    }
+}
+
+/* Smooth scroll cho modal content */
+.modal-content {
+    scroll-behavior: smooth;
+}
+
+.w-33 {
+    width: 33.333333%;
+}
+
+/* Đảm bảo modal content không bắt click events */
+.modal-content {
+    pointer-events: auto;
+}
+
+/* Modal backdrop - chỉ bắt click khi cần */
+.admin-modal {
+    pointer-events: auto;
+}
+
+/* Ngăn click khi đang animation */
+.admin-modal:not(.show) {
+    pointer-events: none;
+}
+
+/* Fix cho các button trong table */
+#users-table-body button {
+    pointer-events: auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* Overlay modal lên mọi thứ */
+.admin-modal {
+    z-index: 9999;
+}
+
+/* Đảm bảo modal content cao hơn overlay */
+.modal-content {
+    z-index: 10000;
+}
+
+.recent-activity i {
+    font-size: 30px;
+}
+
+/* Chart Height Utilities */
+.h-64 {
+    height: 16rem;
+}
+
+.h-80 {
+    height: 20rem;
+}
