@@ -3,7 +3,7 @@
 #   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+#   * Remove `managed = True` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
@@ -19,7 +19,7 @@ class Calendar(models.Model):
     user = models.OneToOneField('User', models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'calendar'
 
 
@@ -43,7 +43,7 @@ class Event(models.Model):
     task = models.ForeignKey('Task', models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'event'
 
 
@@ -56,7 +56,7 @@ class EventReminder(models.Model):
     created_at = models.DateTimeField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'event_reminder'
 
 
@@ -66,7 +66,7 @@ class Flashcard(models.Model):
     user = models.ForeignKey('User', models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'flashcard'
 
 
@@ -81,7 +81,7 @@ class Flashcarditem(models.Model):
     set = models.ForeignKey('Flashcardset', models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'flashcarditem'
 
 
@@ -94,7 +94,7 @@ class Flashcardprogress(models.Model):
     user = models.ForeignKey('User', models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'flashcardprogress'
         unique_together = (('card', 'user'),)
 
@@ -107,7 +107,7 @@ class Flashcardset(models.Model):
     flashcard = models.ForeignKey(Flashcard, models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'flashcardset'
 
 
@@ -117,7 +117,7 @@ class Habit(models.Model):
     user = models.ForeignKey('User', models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'habit'
 
 
@@ -134,7 +134,7 @@ class Habitlist(models.Model):
     habit = models.ForeignKey(Habit, models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'habitlist'
 
 
@@ -148,7 +148,7 @@ class Habitlistlog(models.Model):
     habitlist = models.ForeignKey(Habitlist, models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'habitlistlog'
         unique_together = (('habitlist', 'date'),)
 
@@ -166,7 +166,7 @@ class Pomodoro(models.Model):
     user = models.ForeignKey('User', models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'pomodoro'
 
 
@@ -184,7 +184,7 @@ class Pomodorohistory(models.Model):
     task = models.ForeignKey('Task', models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'pomodorohistory'
 
 
@@ -201,7 +201,7 @@ class Task(models.Model):
     group = models.ForeignKey('Todolistgroup', models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'task'
 
 
@@ -211,7 +211,7 @@ class Todolist(models.Model):
     user = models.ForeignKey('User', models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'todolist'
 
 
@@ -223,7 +223,7 @@ class Todolistgroup(models.Model):
     todolist = models.ForeignKey(Todolist, models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'todolistgroup'
 
 
@@ -239,7 +239,7 @@ class User(models.Model):
     role = models.CharField(max_length=36, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'user'
 
 
@@ -248,5 +248,5 @@ class UsersAvatar(models.Model):
     path = models.CharField(unique=True, max_length=500)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'users_avatar'

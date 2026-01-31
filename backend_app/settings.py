@@ -82,22 +82,13 @@ WSGI_APPLICATION = 'backend_app.wsgi.application'
 
 # consolidate database configuration
 DATABASES = {
-    'default': dj_database_url.config(
-        default=f"mysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASS')}@{os.getenv('DB_HOST')}:{3306}/{os.getenv('DB_NAME')}",
-        conn_max_age=600
-    )
+    'default': {
+        "ENGINE": 'django.db.backends.sqlite3',
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
 }
 
-if env('DATABASE_URL', default=None):
-    DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
-    DATABASES['default']['CONN_MAX_AGE'] = 600
-
-if not DATABASES.get('default'):
-    # Fallback to sqlite if no DB configured
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+DATABASES['default'] = dj_database_url.parse("postgresql://study_tools_website_user:HYZoLw46wwl69EpMtHrz754XFPZ4lPVM@dpg-d5uem12qcgvc739kmmc0-a.singapore-postgres.render.com/study_tools_website")
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
